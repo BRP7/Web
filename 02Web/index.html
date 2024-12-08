@@ -34,7 +34,6 @@
       padding: 5px 0;
     }
 
- 
   @font-face {
     font-family: 'Quantico-Bold';
     src: url('../Quantico-Bold.ttf') format('truetype');
@@ -42,11 +41,44 @@
   .diagonal-text {
     font-family: 'Quantico-Bold', Arial, sans-serif;
   }
+
+  .nav-bar {
+    font-family: 'Quantico-Bold', Arial, sans-serif;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    color: #fff;
+    padding: 1em;
+    text-align: center;
+  }
+  .nav-bar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav-bar li {
+    display: inline-block;
+    margin-right: 20px;
+  }
+  .nav-bar a {
+    color: #fff;
+    text-decoration: none;
+  }
+  .nav-bar a:hover {
+    color: #ccc;
+  }
   </style>
 </head>
 <body>
-
-<div class="container">
+    <div class="container">
+    <nav class="nav-bar">
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
   <img src="2ndDesign.jpg" alt="Image">
   <div class="diagonal-text">Nxtsite</div>
 </div>
