@@ -1,14 +1,21 @@
 module.exports = {
-  content: ["./index.html", "./src/**/*.{js,jsx}"],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
-        lightGray: '#e0e0e0',
-        neonBlue: '#00d4ff',
-        whiteLight: '#ffffff',
+        neonBlue: '#66fcf1',
+        darkGray: '#1f2833',
+        lightGray: '#c5c6c7',
+        pureWhite: '#ffffff',
       },
-      boxShadow: {
-        glow: '0 0 20px 5px rgba(0, 212, 255, 0.5)',
+      animation: {
+        pulse: 'pulse 2s infinite',
+      },
+      keyframes: {
+        pulse: {
+          '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+          '50%': { transform: 'scale(1.05)', opacity: '0.8' },
+        },
       },
     },
   },
