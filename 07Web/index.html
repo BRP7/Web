@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smooth Image Transition</title>
+  <style>
+    /* Set basic styles for the body and prevent scrolling */
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Page container */
+    .page {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 1s ease-in-out, opacity 1s ease-in-out;
+    }
+
+    /* The image container with the transition effect */
+    .image-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: url('image.jpg') center center / cover no-repeat;
+      background-size: cover;
+      transition: background-color 1s ease, opacity 1s ease;
+    }
+
+    /* Add overlay gradient effect on first page */
+    .image-container.page-one {
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.5)), url('image.jpg');
+    }
+
+    /* Add different background color for second page */
+    .image-container.page-two {
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(255, 255, 255, 0.4)), url('image.jpg');
+    }
+
+    /* Full screen image styles */
+    .image-container img {
+      width: 100%;
+      height: auto;
+      opacity: 0;
+    }
+
+    /* Page transition styles */
+    .transition-active {
+      background-color: rgba(0, 0, 0, 0.8);
+      opacity: 1;
+    }
+
+    .transition-out {
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="image-container page-one">
+      <img src="image.jpg" alt="Image" />
+    </div>
+  </div>
+
+  <script>
+    // Function to switch from page one to page two
+    function transitionToPageTwo() {
+      const page = document.querySelector('.page');
+      const imageContainer = document.querySelector('.image-container');
+
+      // Add transition out effect to fade out the page
+      page.classList.add('transition-out');
+
+      // After transition out, switch to page two with a new background effect
+      setTimeout(() => {
+        imageContainer.classList.remove('page-one');
+        imageContainer.classList.add('page-two');
+        page.classList.remove('transition-out');
+        page.classList.add('transition-active');
+      }, 1000); // Wait 1 second for the fade out
+    }
+
+    // Simulate page transition after 2 seconds (for demo)
+    setTimeout(transitionToPageTwo, 2000); // Change to second page after 2 seconds
+  </script>
+</body>
+</html>
