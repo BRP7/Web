@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seamless Transition with Vibrant.js</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      height: 200vh; /* To make sure there's enough content to scroll */
+    }
+
+    .first-section {
+      position: relative;
+      height: 100vh; /* Full viewport height */
+      background: url('./Web/08smotth/image.jpg') center center / cover no-repeat;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .first-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.8) 100%);
+      pointer-events: none;
+    }
+
+    .second-section {
+      height: 100vh;
+      background: linear-gradient(to top, var(--primary-light), var(--primary-dark));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      width: 80%;
+      max-width: 1200px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      backdrop-filter: blur(5px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- First Section with Image -->
+  <section class="first-section">
+    <div>
+      <h1>First Section</h1>
+    </div>
+  </section>
+
+  <!-- Second Section with Cards -->
+  <section class="second-section">
+    <div class="cards-container">
+      <div class="card">
+        <h3>Card 1</h3>
+        <p>This is some content for the first card.</p>
+      </div>
+      <div class="card">
+        <h3>Card 2</h3>
+        <p>This is some content for the second card.</p>
+      </div>
+      <div class="card">
+        <h3>Card 3</h3>
+        <p>This is some content for the third card.</p>
+      </div>
+      <div class="card">
+        <h3>Card 4</h3>
+        <p>This is some content for the fourth card.</p>
+      </div>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/vibrant@2.1.0/dist/vibrant.min.js"></script>
+  <script>
+    // Function to extract colors using Vibrant.js
+    function extractColors(imageSrc) {
+      const image = new Image();
+      image.src = imageSrc;
+      image.onload = function() {
+        const vibrant = new Vibrant(image);
+        const swatches = vibrant.swatches();
+        const primaryLight = swatches.Vibrant.getHex();  // Extract dominant color
+        const primaryDark = swatches.DarkVibrant.getHex();  // Extract darker variant
+        document.documentElement.style.setProperty('--primary-light', primaryLight);
+        document.documentElement.style.setProperty('--primary-dark', primaryDark);
+      };
+    }
+
+    // Call the function to extract colors
+    extractColors('../08smotth/image.jpg'); // Replace with your image URL
+
+  </script>
+
+</body>
+</html>
