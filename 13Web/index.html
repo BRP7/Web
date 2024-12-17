@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smooth Image Transition</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      overflow-x: hidden;
+    }
+
+    .first-section {
+      height: 100vh;
+      background: url('../08smotth/image.jpg') center center / cover no-repeat;
+      position: relative;
+    }
+
+    .second-section {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      position: relative;
+      transition: background-color 1s ease;
+    }
+
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      width: 80%;
+      max-width: 1200px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- First Section with the Image -->
+  <section class="first-section" id="first-section">
+    <div class="content">
+      <h1>Welcome to My Page</h1>
+      <p>Scroll down to see the content below</p>
+    </div>
+  </section>
+
+  <!-- Second Section with Cards -->
+  <section class="second-section" id="second-section">
+    <div class="cards-container">
+      <div class="card">Card 1</div>
+      <div class="card">Card 2</div>
+      <div class="card">Card 3</div>
+      <div class="card">Card 4</div>
+    </div>
+  </section>
+
+  <script>
+    // Function to extract dominant color from the image using canvas
+    function getImageColors(imageSrc, callback) {
+      const img = new Image();
+      img.src = imageSrc;
+      img.crossOrigin = "Anonymous";  // Allow cross-origin image access
+
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+
+        // Get pixel data from the image
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const pixels = data.data;
+        let r = 0, g = 0, b = 0, count = 0;
+
+        // Loop through pixels and calculate average color
+        for (let i = 0; i < pixels.length; i += 4) {
+          r += pixels[i];     // Red
+          g += pixels[i + 1]; // Green
+          b += pixels[i + 2]; // Blue
+          count++;
+        }
+
+        r = Math.floor(r / count);
+        g = Math.floor(g / count);
+        b = Math.floor(b / count);
+
+        callback(`rgb(${r}, ${g}, ${b})`);
+      };
+    }
+
+    // Scroll event listener to change the second section background
+    window.addEventListener('scroll', function() {
+      const scrollPosition = window.scrollY;
+      const firstSection = document.getElementById('first-section');
+      const secondSection = document.getElementById('second-section');
+
+      // Get the color from the image on the first section
+      getImageColors('../08smotth/image.jpg', (dominantColor) => {
+        const opacity = Math.min(scrollPosition / window.innerHeight, 1);
+
+        // Gradually blend the second section's background with the image color from the first section
+        secondSection.style.background = `linear-gradient(to bottom, ${dominantColor}, rgba(0, 0, 0, ${opacity}))`;
+      });
+    });
+  </script>
+
+</body>
+</html>
