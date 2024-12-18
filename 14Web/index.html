@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seamless Image Transition</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    /* First Section with the Image */
+    .first-section {
+      height: 100vh;
+      background: url('../08smotth/image.jpg') center center / cover no-repeat;
+      position: relative;
+    }
+
+    /* Second Section with Cards */
+    .second-section {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      position: relative;
+      transition: background-color 0.5s ease;
+    }
+
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      width: 80%;
+      max-width: 1200px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- First Section with the Image -->
+  <section class="first-section" id="first-section"></section>
+
+  <!-- Second Section with Cards -->
+  <section class="second-section" id="second-section">
+    <div class="cards-container">
+      <div class="card">Card 1</div>
+      <div class="card">Card 2</div>
+      <div class="card">Card 3</div>
+      <div class="card">Card 4</div>
+    </div>
+  </section>
+
+  <script>
+    // Function to extract dominant colors and simulate lighting effects
+    function extractColors(imageSrc, callback) {
+      const img = new Image();
+      img.src = imageSrc;
+      img.crossOrigin = 'Anonymous';  // Enable CORS for image loading
+
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        // Draw the image onto the canvas
+        ctx.drawImage(img, 0, 0);
+
+        // Get pixel data from the image
+        const pixelData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = pixelData.data;
+
+        let r = 0, g = 0, b = 0, a = 0, count = 0;
+
+        // Loop through pixels and calculate color data
+        for (let i = 0; i < data.length; i += 4) {
+          r += data[i];       // Red
+          g += data[i + 1];   // Green
+          b += data[i + 2];   // Blue
+          a += data[i + 3];   // Alpha
+          count++;
+        }
+
+        // Calculate average color
+        r = Math.floor(r / count);
+        g = Math.floor(g / count);
+        b = Math.floor(b / count);
+
+        callback({ r, g, b });
+      };
+    }
+
+    // Function to adjust the background color of the second section based on scroll position
+    function adjustBackgroundColor() {
+      const firstSection = document.getElementById('first-section');
+      const secondSection = document.getElementById('second-section');
+      const scrollPosition = window.scrollY;
+
+      // Extract dominant color from the first section image
+      extractColors('../08smotth/image.jpg', function(dominantColor) {
+        // Calculate the blend ratio based on scroll position
+        const ratio = Math.min(scrollPosition / window.innerHeight, 1);
+        
+        // Simulate the lighting by adjusting the color's opacity based on the scroll position
+        const blendedColor = `rgb(${dominantColor.r}, ${dominantColor.g}, ${dominantColor.b})`;
+
+        // Apply the color to the second section with smooth transition
+        secondSection.style.backgroundColor = blendedColor;
+        secondSection.style.backgroundImage = `linear-gradient(to bottom, rgba(${dominantColor.r}, ${dominantColor.g}, ${dominantColor.b}, 0.4), rgba(0, 0, 0, ${ratio}))`;
+      });
+    }
+
+    // Add scroll event listener to adjust the background color as the user scrolls
+    window.addEventListener('scroll', adjustBackgroundColor);
+
+    // Initial background adjustment when page loads
+    window.onload = adjustBackgroundColor;
+  </script>
+
+</body>
+</html>
