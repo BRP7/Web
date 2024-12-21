@@ -1,0 +1,31 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden; /* Disable vertical scrolling */
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    transition: transform 0.8s ease-in-out; /* Smooth transition between pages */
+}
+
+.page {
+    flex: 0 0 100vw; /* Each page takes up 100% of the viewport width */
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    color: white;
+    transform-origin: left center; /* Create the turning effect from the left */
+}
+
+body {
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
