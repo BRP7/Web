@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seamless Light Continuation</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      height: 200vh; /* To create scrollable space */
+      overflow-x: hidden;
+    }
+
+    /* First Section with Image and Gradient */
+    .first-section {
+      height: 100vh;
+      background: url('../08smotth/image.jpg') center center / cover no-repeat;
+      position: relative;
+      z-index: 1;
+    }
+
+    .first-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.5)); /* example gradient */
+      z-index: 2;
+    }
+
+    /* Second Section with Cards and Gradient */
+    .second-section {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      z-index: 2;
+      transition: background 1s ease-in-out;
+    }
+
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      width: 80%;
+      max-width: 1200px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- First Section with the Image -->
+  <section class="first-section"></section>
+
+  <!-- Second Section with Cards -->
+  <section class="second-section">
+    <div class="cards-container">
+      <div class="card">Card 1</div>
+      <div class="card">Card 2</div>
+      <div class="card">Card 3</div>
+      <div class="card">Card 4</div>
+    </div>
+  </section>
+
+  <script>
+    // Function to capture the gradient or light effects from the first section and transfer them
+    function smoothTransition() {
+      const firstSection = document.querySelector('.first-section');
+      const secondSection = document.querySelector('.second-section');
+
+      // Capture the background image of the first section
+      const firstSectionBg = window.getComputedStyle(firstSection).backgroundImage;
+
+      // Capture the gradient of the first section if it exists
+      const firstSectionGradient = window.getComputedStyle(firstSection::before).background;
+
+      // Set the second section background to create a seamless transition
+      secondSection.style.backgroundImage = firstSectionBg;
+      secondSection.style.background = firstSectionGradient;
+
+      // As the user scrolls, adjust the second section's background position to create a continuous effect
+      window.addEventListener('scroll', function() {
+        const scrollPos = window.scrollY;
+        const scrollFactor = scrollPos / window.innerHeight;
+
+        // Adjust the gradient or image position to simulate a seamless light transition
+        secondSection.style.backgroundPosition = `center ${scrollFactor * 100}%`;
+      });
+    }
+
+    // Initialize the smooth transition when the page is loaded
+    window.onload = smoothTransition;
+  </script>
+
+</body>
+</html>
