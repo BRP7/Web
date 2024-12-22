@@ -35,6 +35,9 @@
       background: url('image.jpg') center center / cover no-repeat;
       background-size: cover;
       transition: background-color 1s ease, opacity 1s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     /* Add overlay gradient effect on first page */
@@ -45,13 +48,8 @@
     /* Add different background color for second page */
     .image-container.page-two {
       background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(255, 255, 255, 0.4)), url('image.jpg');
-    }
-
-    /* Full screen image styles */
-    .image-container img {
-      width: 100%;
-      height: auto;
-      opacity: 0;
+      background-size: cover;
+      background-position: center;
     }
 
     /* Page transition styles */
@@ -63,6 +61,38 @@
     .transition-out {
       opacity: 0;
     }
+
+    /* Card Section on the second page */
+    .cards-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      width: 80%;
+      max-width: 1200px;
+      z-index: 2;
+      color: white;
+    }
+
+    .card {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      font-size: 1.5rem;
+    }
+
+    .card p {
+      font-size: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -72,22 +102,46 @@
     </div>
   </div>
 
+  <div class="page">
+    <div class="image-container page-two">
+      <!-- Card Section for the second page -->
+      <div class="cards-container">
+        <div class="card">
+          <h3>Card 1</h3>
+          <p>This is some content for the first card.</p>
+        </div>
+        <div class="card">
+          <h3>Card 2</h3>
+          <p>This is some content for the second card.</p>
+        </div>
+        <div class="card">
+          <h3>Card 3</h3>
+          <p>This is some content for the third card.</p>
+        </div>
+        <div class="card">
+          <h3>Card 4</h3>
+          <p>This is some content for the fourth card.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Function to switch from page one to page two
     function transitionToPageTwo() {
-      const page = document.querySelector('.page');
+      const page = document.querySelectorAll('.page');
       const imageContainer = document.querySelector('.image-container');
 
       // Add transition out effect to fade out the page
-      page.classList.add('transition-out');
+      page[0].classList.add('transition-out');
 
       // After transition out, switch to page two with a new background effect
       setTimeout(() => {
         imageContainer.classList.remove('page-one');
         imageContainer.classList.add('page-two');
-        page.classList.remove('transition-out');
-        page.classList.add('transition-active');
-      }, 1000); // Wait 1 second for the fade out
+        page[0].classList.remove('transition-out');
+        page[0].classList.add('transition-active');
+      }, 1000); // Wait 1 second for the fade-out
     }
 
     // Simulate page transition after 2 seconds (for demo)
