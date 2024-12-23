@@ -36,7 +36,8 @@ document.addEventListener('wheel', (event) => {
             }
         }
 
-        switchPage();  // Apply the page transition
+        switchPage();  
+        // Apply the page transition
 
         // Reset the scroll flag after a delay to allow for smooth transition
         setTimeout(() => {
