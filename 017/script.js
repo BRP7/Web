@@ -43,5 +43,5 @@ document.addEventListener('wheel', (event) => {
         setTimeout(() => {
             isScrolling = false;
         }, 800);  // The delay matches the duration of the transition (0.8s)
-    }, 200);  // Increased delay between scroll events (200ms)
+    }, 200);
 });
