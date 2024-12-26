@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lighting Effects on Scroll</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      height: 200vh; /* To create scrollable space */
+    }
+
+    /* First Section with Image */
+    .first-section {
+      height: 100vh;
+      background: url('../08smotth/image.jpg') center center / cover no-repeat;
+      position: relative;
+    }
+
+    /* Second Section with Cards */
+    .second-section {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      position: relative;
+      transition: background-color 0.5s ease, background-image 0.5s ease;
+    }
+
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      width: 80%;
+      max-width: 1200px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- First Section with the Image -->
+  <section class="first-section" id="first-section"></section>
+
+  <!-- Second Section with Cards -->
+  <section class="second-section" id="second-section">
+    <div class="cards-container">
+      <div class="card">Card 1</div>
+      <div class="card">Card 2</div>
+      <div class="card">Card 3</div>
+      <div class="card">Card 4</div>
+    </div>
+  </section>
+
+  <script>
+    // Function to extract prominent colors from the bottom of the image
+    function extractBottomColors(imageSrc, callback) {
+      const img = new Image();
+      img.src = imageSrc;
+      img.crossOrigin = 'Anonymous'; // Enable cross-origin access for image
+
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        // Draw the image on the canvas
+        ctx.drawImage(img, 0, 0);
+
+        // Extract pixel data from the bottom part of the image (e.g., the last 30% of the height)
+        const bottomPartHeight = Math.floor(img.height * 0.3);
+        const pixelData = ctx.getImageData(0, img.height - bottomPartHeight, img.width, bottomPartHeight);
+        const data = pixelData.data;
+
+        let colorSamples = [];
+        const sampleRate = 10; // Sample every 10th pixel to get a rough idea of the prominent colors
+
+        // Extract colors
+        for (let i = 0; i < data.length; i += sampleRate * 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          const a = data[i + 3];
+
+          if (a > 128) { // Ignore fully transparent pixels
+            colorSamples.push({ r, g, b });
+          }
+        }
+
+        // Calculate the average color from the bottom part of the image
+        const avgColor = colorSamples.reduce((acc, color) => {
+          acc.r += color.r;
+          acc.g += color.g;
+          acc.b += color.b;
+          return acc;
+        }, { r: 0, g: 0, b: 0 });
+
+        const numSamples = colorSamples.length;
+        const averageColor = {
+          r: Math.floor(avgColor.r / numSamples),
+          g: Math.floor(avgColor.g / numSamples),
+          b: Math.floor(avgColor.b / numSamples)
+        };
+
+        callback(averageColor);
+      };
+    }
+
+    // Function to create a smooth blend for the second section background
+    function createSmoothBlend(scrollPosition, maxScroll, startColor, endColor) {
+      // Calculate the blend ratio based on scroll position
+      const ratio = Math.min(scrollPosition / maxScroll, 1);
+
+      const blendedColor = {
+        r: Math.floor(startColor.r + (endColor.r - startColor.r) * ratio),
+        g: Math.floor(startColor.g + (endColor.g - startColor.g) * ratio),
+        b: Math.floor(startColor.b + (endColor.b - startColor.b) * ratio)
+      };
+
+      return `rgb(${blendedColor.r}, ${blendedColor.g}, ${blendedColor.b})`;
+    }
+
+    // Function to update the background on scroll
+    function updateBackgroundOnScroll() {
+      const secondSection = document.getElementById('second-section');
+      const scrollPosition = window.scrollY;
+      const maxScroll = window.innerHeight;
+
+      // Extract prominent colors from the bottom of the first section image
+      extractBottomColors('../08smotth/image.jpg', function(startColor) {
+        // Define a target color for the second section (you can adjust this)
+        const endColor = { r: 0, g: 0, b: 0 }; // Example solid dark color
+
+        // Blend the start and end colors
+        const blendedColor = createSmoothBlend(scrollPosition, maxScroll, startColor, endColor);
+
+        // Apply the blended color to the second section background
+        secondSection.style.backgroundColor = blendedColor;
+      });
+    }
+
+    // Add scroll event listener to update background color on scroll
+    window.addEventListener('scroll', updateBackgroundOnScroll);
+
+    // Initial background adjustment on page load
+    window.onload = updateBackgroundOnScroll;
+
+  </script>
+
+</body>
+</html>
