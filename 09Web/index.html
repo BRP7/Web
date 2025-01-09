@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smooth Image Transition</title>
+  <style>
+    /* Set basic styles for the body and prevent scrolling */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Full screen first section */
+    .first-section {
+      position: relative;
+      height: 100vh; /* 100% of the viewport height */
+      background: url('../08smotth/image.jpg') center center / cover no-repeat;
+      background-size: cover;
+      transition: background-color 1s ease, opacity 1s ease;
+    }
+
+    /* Add overlay gradient effect on first section */
+    .first-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.5));
+      z-index: 1;
+    }
+
+    /* Content within the first section */
+    .first-section .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      color: white;
+      text-align: center;
+    }
+
+    .first-section .content h1 {
+      font-size: 3rem;
+    }
+
+    /* Second section with cards */
+    .second-section {
+      height: 100vh; /* Full viewport height */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0.8); /* Dark background */
+      color: white;
+    }
+
+    /* Cards layout */
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      width: 80%;
+      max-width: 1200px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 1rem;
+    }
+
+    /* Smooth transition when scrolling */
+    .smooth-transition {
+      transition: background-color 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- First Section with the Image -->
+  <section class="first-section smooth-transition">
+    <div class="content">
+    </div>
+  </section>
+
+  <!-- Second Section with Cards -->
+  <section class="second-section">
+    <div class="cards-container">
+      <div class="card">
+        <h3>Card 1</h3>
+        <p>This is some content for the first card.</p>
+      </div>
+      <div class="card">
+        <h3>Card 2</h3>
+        <p>This is some content for the second card.</p>
+      </div>
+      <div class="card">
+        <h3>Card 3</h3>
+        <p>This is some content for the third card.</p>
+      </div>
+      <div class="card">
+        <h3>Card 4</h3>
+        <p>This is some content for the fourth card.</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // JavaScript to detect scroll and change the background of the first section
+    window.addEventListener('scroll', function() {
+      const firstSection = document.querySelector('.first-section');
+      const scrollPosition = window.scrollY;
+
+      // When scrolling down, change the background of the first section
+      if (scrollPosition > 100) {
+        firstSection.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+      } else {
+        firstSection.style.backgroundColor = "rgba(255, 255, 255, 0.5)";
+      }
+    });
+  </script>
+
+</body>
+</html>
